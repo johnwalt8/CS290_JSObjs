@@ -8,7 +8,7 @@
 "use strict";
 
 var deepEqual = function (value_1, value_2) {
-    var key_1, element_1, key_2, element_2, keyFlag, equalFlag = false;
+    var key_1, key_2, equalFlag = false;
 
     if (typeof value_1 !== "object" || typeof value_2 !== "object") {
         if (value_1 === value_2) {
@@ -19,31 +19,24 @@ var deepEqual = function (value_1, value_2) {
             equalFlag = true;
         }
     } else if (Object.keys(value_1).length === Object.keys(value_2).length) {
-        equalFlag = true;
         for (key_1 in value_1) {
-            //keyFlag = false;
             if (value_1.hasOwnProperty(key_1)) {
-                element_1 = value_1[key_1];
                 for (key_2 in value_2) {
-                    if (value_2.hasOwnProperty(key_2)) {
-                        element_2 = value_2[key_2];
-                        if (key_1 === key_2) {
-                            //keyFlag = true;
-                            equalFlag = deepEqual(element_1, element_2);
-                        }
-                        if (equalFlag === false) {// || keyFlag === false) {
+                    if (value_2.hasOwnProperty(key_2) && (key_1 === key_2)) {
+                        equalFlag = deepEqual(value_1[key_1], value_2[key_2]);
+                        if (equalFlag === true) {
                             break;
                         }
                     }
                 }
-                if (equalFlag === false) {// || keyFlag === false) {
+                if (equalFlag === false) {
                     break;
                 }
             }
         }
     }
 
-    return (equalFlag); // && keyFlag);
+    return (equalFlag);
 };
 
 var obj = {here: {is: "an"}, object: 2};
@@ -72,5 +65,5 @@ console.log("deepEqual(obj3, obj3): " + deepEqual(obj3, obj3));
 // ? true
 console.log("deepEqual(obj3, null): " + deepEqual(obj3, null));
 // ? true
-console.log("deepEqual(obj, {hare: {in: 'an'}, object: 2}): " + deepEqual(obj, {hare: {in: "an"}, object: 2}));
+console.log("deepEqual(obj, {here: {isnt: 'an'}, object: 2}): " + deepEqual(obj, {here: {isnt: "an"}, object: 2}));
 // ? false
